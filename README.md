@@ -11,6 +11,14 @@ two-agent system for the **Forge 2 Edition 1 Qualifier** (June 21, 2026).
 > See **[ARCHITECTURE.md](ARCHITECTURE.md)** for the system design, **[agent-log.md](agent-log.md)**
 > for the unedited agent/Slack exchanges, and **[skills/](skills/)** for the reusable skill.
 
+## Live
+
+- **API:** https://forge-kanban-api.onrender.com (try [`/api/boards`](https://forge-kanban-api.onrender.com/api/boards))
+- **Frontend:** _deploying to Vercel — URL coming next_
+
+> The API runs on Render's free tier: it sleeps after ~15 min idle, so the first request may take
+> ~30–60s to wake. Data is reseeded on each restart (demo board #1 is always present).
+
 ---
 
 ## Features
