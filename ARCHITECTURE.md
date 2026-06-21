@@ -4,7 +4,6 @@ This document covers two layers:
 
 1. **The application** — the Kanban API + UI (factual; this is what was built).
 2. The agent-assisted workflow used during development and deployment.
-   `[FILL IN]` markers indicate values specific to your own setup).
 
 ---
 
@@ -115,7 +114,19 @@ The qualifier requires a human-supervised agent workflow with planning, executio
 
 Project decisions, implementation notes, deployment observations, and agent outputs were recorded through Slack conversations and preserved in `agent-log.md`.
 
-The project used documented conversation history as the primary source of context throughout development.
+The Slack conversation history served as the primary source of project context, design decisions, deployment notes, and implementation feedback throughout development.
+
+Hermes was designed as the orchestration layer responsible for maintaining context, coordinating tasks, and supervising agent activities, while OpenClaw acted as the execution and coding layer. In this implementation, project context was maintained through documented Slack interactions and repository documentation. Based on common OpenClaw/Hermes workflows, Hermes typically serves as the planning and memory layer while OpenClaw performs implementation and execution tasks.
+
+### Agent Configuration
+
+| Agent               | Provider                    | Model                                      | Notes                                                                                        |
+| ------------------- | --------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Hermes              | Planned orchestration layer | Not configured during final implementation | Task coordination, memory management, workflow supervision                                   |
+| OpenClaw (ForgeBot) | Slack Workspace Agent       | Workspace-managed                          | Architecture planning, repository review, deployment validation, and implementation feedback |
+
+API keys, deployment credentials, and environment secrets are managed through environment variables and deployment platforms and are never committed to source control.
+
 
 ### Agent Configuration
 
