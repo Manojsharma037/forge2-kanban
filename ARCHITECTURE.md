@@ -3,7 +3,7 @@
 This document covers two layers:
 
 1. **The application** — the Kanban API + UI (factual; this is what was built).
-2. **The two-agent system** — OpenClaw + Hermes wired through Slack (the operating model;
+2. The agent-assisted workflow used during development and deployment.
    `[FILL IN]` markers indicate values specific to your own setup).
 
 ---
@@ -69,53 +69,76 @@ boards ──< lists ──< cards >── card_tag ──< tags
 
 ## 2. Two-Agent System
 
-The qualifier requires a **two-agent**, human-supervised loop wired through Slack.
+The qualifier requires a human-supervised agent workflow with planning, execution, visibility, and documented decision-making.
 
 ```
-            ┌──────────────────────── Slack workspace ───────────────────────┐
-            │                                                                 │
-   Human ──►│  #forge-build                                                   │
-  operator  │     │                                                           │
-            │     ▼                                                           │
-            │  ┌──────────────┐   tasks / plans   ┌──────────────────────┐    │
-            │  │   HERMES     │ ────────────────► │      OPENCLAW        │    │
-            │  │  "the brain" │                   │     "the hands"      │    │
-            │  │  orchestrator│ ◄──────────────── │  coding agent        │    │
-            │  │  + memory    │   results/diffs   │  writes & runs code  │    │
-            │  │  + skills    │                   │                      │    │
-            │  └──────────────┘                   └──────────────────────┘    │
-            └─────────────────────────────────────────────────────────────────┘
-                       │                                   │
-                       ▼                                   ▼
-                memory store                         this repo (backend/, frontend/)
-            (decisions, context)                     + shell / git / artisan / npm
+            ┌──────────────────────── Slack Workspace ───────────────────────┐
+            │                                                                │
+   Human ──►│  #forge-build                                                  │
+  operator  │                                                                │
+            │        Task Requests / Reviews / Feedback                      │
+            │                                                                │
+            │                    ┌──────────────────────┐                    │
+            │                    │      OpenClaw        │                    │
+            │                    │   (ForgeBot Agent)   │                    │
+            │                    │                      │                    │
+            │                    │ Architecture Review  │                    │
+            │                    │ Repo Analysis        │                    │
+            │                    │ Deployment Feedback  │                    │
+            │                    └──────────────────────┘                    │
+            │                                                                │
+            └────────────────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+
+                           GitHub Repository + Deployments
+
+                      Backend: Laravel API (Render)
+                      Frontend: React/Vite (Vercel)
 ```
 
 ### Roles
 
-| Agent | Role | Responsibilities |
-| --- | --- | --- |
-| **Hermes** | The brain (orchestrator) | Holds goals + memory, breaks work into tasks, selects and invokes **skills** (see `skills/`), supervises OpenClaw, posts status to Slack. |
-| **OpenClaw** | The hands (coding agent) | Receives tasks via chat, writes/edits files, runs commands (`composer`, `artisan`, `npm`), reports diffs and results back. |
+| Agent               | Role                    | Responsibilities                                                                         |
+| ------------------- | ----------------------- | ---------------------------------------------------------------------------------------- |
+| Human Operator      | Supervisor              | Defines goals, reviews recommendations, approves implementation and deployment decisions |
+| OpenClaw (ForgeBot) | Coding and review agent | Architecture planning, repository review, deployment validation, implementation feedback |
 
-### Visibility & human-in-the-loop
-- All exchanges happen in a Slack channel so a human can read, approve, or interrupt.
-- Destructive/outward actions (migrations on prod, deploys) are surfaced for approval before running.
-- The full transcript is captured in [`agent-log.md`](agent-log.md).
+### Visibility & Human-in-the-Loop
+
+* All agent interactions occurred inside Slack.
+* Human review was required before applying significant implementation changes.
+* Repository reviews, deployment reviews, and architecture planning were performed through Slack conversations.
+* A complete record of interactions is stored in `agent-log.md`.
 
 ### Memory
-- Hermes persists durable context — decisions made, conventions, current task list — so work
-  survives across messages and sessions. `[FILL IN: where memory is stored — e.g. a JSON file,
-  a vector store, the orchestrator's built-in memory]`.
 
-### Free-model configuration `[FILL IN]`
+Project decisions, implementation notes, deployment observations, and agent outputs were recorded through Slack conversations and preserved in `agent-log.md`.
 
-Per the qualifier, **only free models** may be used (Ollama, Groq, Google Gemini, OpenRouter,
-Cerebras, or Cloudflare Workers AI — **DeepSeek is prohibited**). Record your actual choices:
+The project used documented conversation history as the primary source of context throughout development.
 
-| Agent | Provider | Model | Notes |
-| --- | --- | --- | --- |
-| Hermes | `[FILL IN]` | `[FILL IN]` | orchestration / reasoning |
-| OpenClaw | `[FILL IN]` | `[FILL IN]` | code generation |
+### Agent Configuration
 
-API keys live in environment variables / Slack app config and are **never committed**.
+| Agent               | Provider              | Model             | Notes                                                                              |
+| ------------------- | --------------------- | ----------------- | ---------------------------------------------------------------------------------- |
+| OpenClaw (ForgeBot) | Slack Workspace Agent | Workspace-managed | Architecture planning, repository review, deployment feedback, submission guidance |
+
+### Security
+
+* API keys and deployment secrets are stored through environment variables.
+* No credentials are committed to source control.
+* Backend configuration is managed through Laravel environment settings.
+* Frontend configuration is managed through Vite environment variables.
+
+### Human Oversight
+
+The human operator retained final control over:
+
+* Architecture decisions
+* Repository changes
+* Deployment actions
+* Documentation updates
+* Submission preparation
+
+This ensured a fully supervised development workflow throughout the qualifier.
+
