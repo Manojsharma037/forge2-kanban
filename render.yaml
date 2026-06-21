@@ -1,0 +1,23 @@
+# Render Blueprint — one-click API deploy.
+# In Render: New + → Blueprint → point at this repo. Render reads this file.
+services:
+  - type: web
+    name: forge-kanban-api
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    healthCheckPath: /api/boards
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /app/database/database.sqlite
+      # Paste the output of `php artisan key:generate --show` (the "base64:..." string).
+      # If left unset, the container generates one on boot.
+      - key: APP_KEY
+        sync: false
