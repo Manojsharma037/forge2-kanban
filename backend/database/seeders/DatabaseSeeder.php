@@ -7,7 +7,6 @@ use App\Models\BoardList;
 use App\Models\Card;
 use App\Models\Member;
 use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,11 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name'  => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
+        // No users/auth in this app; seed only the demo Kanban board.
+        // (The default UserFactory uses fake(), which isn't available in a
+        //  --no-dev production install — so we avoid it entirely.)
         $board = Board::create([
             'name'        => 'Product Roadmap',
             'description' => 'Forge 2 demo board — track work across the team.',
