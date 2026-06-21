@@ -1,5 +1,6 @@
 # Laravel API container for Render (Docker runtime).
-FROM php:8.2-cli
+# PHP 8.4: composer.lock pulls symfony/clock >=8.4.1, so 8.2/8.3 cannot install.
+FROM php:8.4-cli
 
 # System libs + PHP extensions needed for SQLite.
 RUN apt-get update \

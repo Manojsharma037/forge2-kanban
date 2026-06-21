@@ -44,7 +44,7 @@ two-agent system for the **Forge 2 Edition 1 Qualifier** (June 21, 2026).
 ## Local Setup
 
 ### Prerequisites
-- PHP 8.2+ with the SQLite extension
+- PHP 8.4+ with the SQLite extension (a dependency in `composer.lock` requires `>=8.4.1`)
 - Composer
 - Node.js 18+
 
